@@ -5,8 +5,8 @@
  */
 package servlet;
 
+import businessControler.ActionHandler;
 import customers.Person;
-import dao.DaoImpl;
 import exception.DatabaseConnectionException;
 
 import javax.servlet.RequestDispatcher;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,16 +30,17 @@ public class PersonLoadServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ActionHandler actionHandler = new ActionHandler();
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         Person person = new Person();
         if (request.getParameter("CustomerNumber") != null & !request.getParameter("CustomerNumber").equals("")) {
             try {
                 person.setCustomerNumber(Long.parseLong(request.getParameter("CustomerNumber")));
-                List<Person> lst = DaoImpl.search(person);
+                List<Person> lst = actionHandler.search(person);
                 if (lst != null)
                     person = lst.get(0);
-            } catch (DatabaseConnectionException | SQLException ex) {
+            } catch (DatabaseConnectionException ex) {
                 Logger.getLogger(PersonLoadServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
             request.setAttribute("person", person);

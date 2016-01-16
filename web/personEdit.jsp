@@ -59,7 +59,7 @@
                              <div class="top-row">
                             <div class="field-wrap">
                                 <label> <span class="active"></span>
-                                    registrationDate
+                                    FatherName
                                 </label>
                                 <input type="text" value=<%= person.getFatherName()  %> name="FatherName" required autocomplete="off"/>
                             </div>

@@ -5,9 +5,9 @@
  */
 package servlet;
 
+import businessControler.ActionHandler;
 import customers.Company;
 import customers.Person;
-import dao.DaoImpl;
 import exception.DatabaseConnectionException;
 
 import javax.servlet.ServletException;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +30,8 @@ public class UpdateServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+        ActionHandler actionHandler = new ActionHandler();
+
         try {
             if (request.getParameter("type").equals("person")) {
 
@@ -41,7 +42,7 @@ public class UpdateServlet extends HttpServlet {
                 person.setLastName(request.getParameter("FatherName"));
                 person.setBirthday(request.getParameter("Birthday"));
                 person.setCustomerNumber(Long.parseLong(request.getParameter("CustomerNumber")));
-                DaoImpl.updatePerson(person);
+                actionHandler.updatePerson(person);
 
             } else {
                 Company company = new Company();
@@ -50,12 +51,14 @@ public class UpdateServlet extends HttpServlet {
                 company.setName(request.getParameter("Name"));
                 company.setRegistrationDate(request.getParameter("RegistrationDate"));
                 company.setCustomerNumber(Long.parseLong(request.getParameter("CustomerNumber")));
-                DaoImpl.updateCompany(company);
+                actionHandler.updateCompany(company);
             }
-        } catch (DatabaseConnectionException | SQLException ex) {
+        } catch (DatabaseConnectionException ex) {
             Logger.getLogger(UpdateServlet.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("message", ex.getMessage());
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("registration.jsp").forward(request, response);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
         out.close();
     }
 

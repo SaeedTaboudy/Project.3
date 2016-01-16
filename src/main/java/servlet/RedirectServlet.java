@@ -24,9 +24,7 @@ public class RedirectServlet extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher(request.getParameter("page"));
 
         if (dispatcher != null) {
-
             dispatcher.forward(request, response);
-
         }
         out.close();
     }

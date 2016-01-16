@@ -1,8 +1,8 @@
 package servlet;
 
+import businessControler.ActionHandler;
 import customers.Company;
 import customers.Person;
-import dao.DaoImpl;
 import exception.DatabaseConnectionException;
 
 import javax.servlet.RequestDispatcher;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
-import java.sql.SQLException;
 
 /**
  * @author Saeed Taboudy  1/13/2016
@@ -25,7 +24,7 @@ public class SearchServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        ActionHandler actionHandler = new ActionHandler();
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         String type = request.getParameter("type");
@@ -39,16 +38,16 @@ public class SearchServlet extends HttpServlet {
             person.setFirstName(request.getParameter("FirstName"));
             person.setLastName(request.getParameter("LastName"));
             try {
-                request.setAttribute("personsList",DaoImpl.search(person));
-            } catch (DatabaseConnectionException | SQLException e) {
+                request.setAttribute("personsList",actionHandler.search(person));
+            } catch (DatabaseConnectionException  e) {
                 e.printStackTrace();
+                request.setAttribute("message", e.getMessage());
+                request.getRequestDispatcher("Error.jsp").forward(request, response);
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("PersonSearchResult.jsp");
 
             if (dispatcher != null) {
-
                 dispatcher.forward(request, response);
-
             }
         } else {
             Company company = new Company();
@@ -60,16 +59,15 @@ public class SearchServlet extends HttpServlet {
             }
             company.setName(request.getParameter("Name"));
             try {
-                request.setAttribute("companyList", DaoImpl.search(company));
-            } catch (DatabaseConnectionException | SQLException e) {
+                request.setAttribute("companyList", actionHandler.search(company));
+            } catch (DatabaseConnectionException  e) {
                 e.printStackTrace();
+                request.setAttribute("message", e.getMessage());
+                request.getRequestDispatcher("Error.jsp").forward(request, response);
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("CompanySearchResult.jsp");
-
             if (dispatcher != null) {
-
                 dispatcher.forward(request, response);
-
             }
         }
         out.close();

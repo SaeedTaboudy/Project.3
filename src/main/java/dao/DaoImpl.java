@@ -42,6 +42,7 @@ public class DaoImpl {
             query = "INSERT INTO Company  (EconomicCode,Name,RegistrationDate) VALUES ('" + company.getEconomicCode() + "'"
                     + ",'" + company.getName() + "','" + company.getRegistrationDate() + "')";
             statement.executeUpdate(query);
+            statement.close();
             return "Company Save";
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,39 +63,42 @@ public class DaoImpl {
                 + person.getFirstName() + "','" + person.getLastName() + "','" + person.getFatherName() + "','" + person.getBirthday() + "')";
         try {
             statement.executeUpdate(query);
+            statement.close();
         } catch (SQLException e) {
             throw new RepetitiousNationalCode();
         }
         return 1;
     }
 
-    public static String updatePerson(Person person) throws DatabaseConnectionException, SQLException {
+    public  String updatePerson(Person person) throws DatabaseConnectionException {
         try {
             Statement statement = getConnection().createStatement();
             String query = "UPDATE Person SET NationalCode ='" + person.getNationalCode() + "',FirstName='" + person.getFirstName() + "',LastName='"
                     + person.getLastName() + "',FatherName='" + person.getFatherName() + "',Birthday='" + person.getBirthday()
                     + "'WHERE CustomerNumber ='" + person.getCustomerNumber() + "'";
             statement.executeUpdate(query);
+            statement.close();
             return "Person info update";
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException();
+            throw new DatabaseConnectionException();
         }
     }
 
-    public static String updateCompany(Company company) throws DatabaseConnectionException, SQLException {
+    public  String updateCompany(Company company) throws DatabaseConnectionException {
         try {
             Statement statement = getConnection().createStatement();
             String query = "UPDATE Company SET Name ='" + company.getName() + "',EconomicCode='" + company.getEconomicCode()
                     + "',RegistrationDate='"
                     + company.getRegistrationDate() + "' WHERE CustomerNumber ='" + company.getCustomerNumber() + "'";
             statement.executeUpdate(query);
+            statement.close();
             return "Company info Update";
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException();
+            throw new DatabaseConnectionException();
         }
     }
 
@@ -103,6 +107,7 @@ public class DaoImpl {
             Statement statement = getConnection().createStatement();
             String query = "DELETE FROM " + obj.getClass().getCanonicalName().replaceAll("customers.", "") + " WHERE CustomerNumber='" + ((BaseInformation) obj).getCustomerNumber() + "'";
             statement.executeUpdate(query);
+            statement.close();
             return "User delete";
 
         } catch (SQLException e) {
@@ -111,7 +116,7 @@ public class DaoImpl {
         }
     }
 
-    public static List<Person> search(Person person) throws DatabaseConnectionException, SQLException {
+    public  List<Person> search(Person person) throws DatabaseConnectionException, SQLException {
         Statement statement = getConnection().createStatement();
         boolean andFlag = false;
         String query = "SELECT * FROM person WHERE ";
@@ -160,10 +165,11 @@ public class DaoImpl {
             personResult.setBirthday(resultSet.getString("Birthday"));
             personList.add(personResult);
         }
+        statement.close();
         return personList;
     }
 
-    public static List<Company> search(Company company) throws DatabaseConnectionException, SQLException {
+    public  List<Company> search(Company company) throws DatabaseConnectionException, SQLException {
         Statement statement = getConnection().createStatement();
         boolean andFlag = false;
         String query = "SELECT * FROM company WHERE ";
@@ -197,16 +203,19 @@ public class DaoImpl {
 
             companies.add(companyResult);
         }
+        resultSet.close();
+        statement.close();
         return companies;
     }
 
-    public static void deletAction(String type, long CustomerNumber) throws DatabaseConnectionException, SQLException {
+    public void deletAction(String type, long CustomerNumber) throws DatabaseConnectionException, SQLException {
         Statement statement = getConnection().createStatement();
         String query = "DELETE FROM " + type + " WHERE CustomerNumber= '" + CustomerNumber + "'";
         statement.executeUpdate(query);
+        statement.close();
     }
 
-    public static String searchNationalCode(String nationalCode) throws DatabaseConnectionException, RepetitiousNationalCode {
+    public  String searchNationalCode(String nationalCode) throws DatabaseConnectionException {
         Statement statement;
         try {
             statement = getConnection().createStatement();
@@ -220,9 +229,10 @@ public class DaoImpl {
             while (resultSet.next()) {
                 return resultSet.getString("CustomerNumber");
             }
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RepetitiousNationalCode();
+            throw new DatabaseConnectionException();
         }
         return null;
     }
