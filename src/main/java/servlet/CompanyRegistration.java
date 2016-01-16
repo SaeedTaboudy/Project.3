@@ -28,14 +28,10 @@ public class CompanyRegistration extends HttpServlet {
 
         try {
             dao.saveUser(company);
-            company.setCustomerNumber(dao.search(company).get(0).getCustomerNumber());
+            company.setCustomerNumber(DaoImpl.search(company).get(0).getCustomerNumber());
             request.setAttribute("company", company);
             request.getRequestDispatcher("companyShow.jsp").forward(request, response);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            request.setAttribute("message", e.getMessage());
-            request.getRequestDispatcher("Error.jsp").forward(request, response);
-        } catch (DatabaseConnectionException e) {
+        } catch (SQLException | DatabaseConnectionException e) {
             e.printStackTrace();
             request.setAttribute("message", e.getMessage());
             request.getRequestDispatcher("Error.jsp").forward(request, response);

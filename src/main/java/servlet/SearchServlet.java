@@ -22,37 +22,34 @@ public class SearchServlet extends HttpServlet {
 
     public SearchServlet() {
     }
-    
+
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         String type = request.getParameter("type");
-        DaoImpl dao = new DaoImpl();
         if (type.equals("person")) {
             Person person = new Person();
             if (!request.getParameter("CustomerNumber").isEmpty()) {
                 person.setCustomerNumber(Long.valueOf(request.getParameter("CustomerNumber")));
             }
-            if (request.getParameter("NationalCode")!= null & request.getParameter("NationalCode").toString()!="")
-            person.setNationalCode(BigInteger.valueOf(Long.parseLong((request.getParameter("NationalCode")))));
+            if (request.getParameter("NationalCode") != null & !request.getParameter("NationalCode").toString().equals(""))
+                person.setNationalCode(BigInteger.valueOf(Long.parseLong((request.getParameter("NationalCode")))));
             person.setFirstName(request.getParameter("FirstName"));
             person.setLastName(request.getParameter("LastName"));
             try {
-                request.setAttribute("personsList", dao.search(person));
-            } catch (DatabaseConnectionException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
+                request.setAttribute("personsList",DaoImpl.search(person));
+            } catch (DatabaseConnectionException | SQLException e) {
                 e.printStackTrace();
             }
-  RequestDispatcher dispatcher = request.getRequestDispatcher("PersonSearchResult.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("PersonSearchResult.jsp");
 
-        if (dispatcher != null) {
+            if (dispatcher != null) {
 
-            dispatcher.forward(request, response);
+                dispatcher.forward(request, response);
 
-        }
+            }
         } else {
             Company company = new Company();
             if (!request.getParameter("CustomerNumber").isEmpty()) {
@@ -63,20 +60,18 @@ public class SearchServlet extends HttpServlet {
             }
             company.setName(request.getParameter("Name"));
             try {
-                request.setAttribute("companyList", dao.search(company));
-            } catch (DatabaseConnectionException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
+                request.setAttribute("companyList", DaoImpl.search(company));
+            } catch (DatabaseConnectionException | SQLException e) {
                 e.printStackTrace();
             }
-              RequestDispatcher dispatcher = request.getRequestDispatcher("CompanySearchResult.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("CompanySearchResult.jsp");
 
-        if (dispatcher != null) {
+            if (dispatcher != null) {
 
-            dispatcher.forward(request, response);
+                dispatcher.forward(request, response);
 
+            }
         }
-        }
-      
+        out.close();
     }
 }

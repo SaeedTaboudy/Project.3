@@ -53,8 +53,8 @@ public class DaoImpl {
     public int saveUser(Person person) throws DatabaseConnectionException, RepetitiousNationalCode {
         Statement statement;
         try {
-             statement = getConnection().createStatement();
-        }catch (SQLException e){
+            statement = getConnection().createStatement();
+        } catch (SQLException e) {
             throw new DatabaseConnectionException();
         }
         String query;
@@ -119,22 +119,24 @@ public class DaoImpl {
             query += "CustomerNumber ='" + person.getCustomerNumber() + "'";
             andFlag = true;
         }
-        if (person.getFirstName() != null & person.getFirstName() != "") {
-            if (andFlag) {
-                query += " AND ";
+        if (person.getFirstName() != null)
+            if (!person.getFirstName().equals("")) {
+                if (andFlag) {
+                    query += " AND ";
 
+                }
+                query += "FirstName ='" + person.getFirstName() + "'";
+                andFlag = true;
             }
-            query += "FirstName ='" + person.getFirstName() + "'";
-            andFlag = true;
-        }
-        if (person.getLastName() != null & person.getLastName() != "") {
-            if (andFlag) {
-                query += " AND ";
+        if (person.getLastName() != null)
+            if (!person.getLastName().equals("")) {
+                if (andFlag) {
+                    query += " AND ";
 
+                }
+                query += "LastName ='" + person.getLastName() + "'";
+                andFlag = true;
             }
-            query += "LastName ='" + person.getLastName() + "'";
-            andFlag = true;
-        }
         if (person.getNationalCode() != null) {
             if (person.getNationalCode().compareTo(BigInteger.ZERO) > 0) {
                 if (andFlag) {

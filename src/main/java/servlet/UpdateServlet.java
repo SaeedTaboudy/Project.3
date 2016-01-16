@@ -45,7 +45,7 @@ public class UpdateServlet extends HttpServlet {
 
             } else {
                 Company company = new Company();
-                if (request.getParameter("EconomicCode") != null & request.getParameter("EconomicCode").toString()!="")
+                if (request.getParameter("EconomicCode") != null & !request.getParameter("EconomicCode").toString().equals(""))
                 company.setEconomicCode(Long.parseLong(request.getParameter("EconomicCode")));
                 company.setName(request.getParameter("Name"));
                 company.setRegistrationDate(request.getParameter("RegistrationDate"));

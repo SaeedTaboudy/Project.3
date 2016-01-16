@@ -28,5 +28,6 @@ public class RedirectServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         }
+        out.close();
     }
 }

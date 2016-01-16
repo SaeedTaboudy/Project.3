@@ -7,15 +7,16 @@ package servlet;
 
 import dao.DaoImpl;
 import exception.DatabaseConnectionException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -32,9 +33,7 @@ public class CompanyDeleteServlet extends HttpServlet {
             DaoImpl.deletAction("company", CustomerNumber);
             request.getRequestDispatcher("registration.jsp").forward(request, response);
             out.close();
-        } catch (DatabaseConnectionException ex) {
-            Logger.getLogger(CompanyDeleteServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (DatabaseConnectionException | SQLException ex) {
             Logger.getLogger(CompanyDeleteServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
