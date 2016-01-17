@@ -2,7 +2,6 @@ package servlet;
 
 import businessControler.ActionHandler;
 import customers.Company;
-import exception.DatabaseConnectionException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +29,7 @@ public class CompanyRegistration extends HttpServlet {
             company.setCustomerNumber(actionHandler.search(company).get(0).getCustomerNumber());
             request.setAttribute("company", company);
             request.getRequestDispatcher("companyShow.jsp").forward(request, response);
-        } catch (DatabaseConnectionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("message", e.getMessage());
             request.getRequestDispatcher("Error.jsp").forward(request, response);

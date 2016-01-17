@@ -17,7 +17,7 @@ public class ActionHandler {
 
     public void deleteAction(String type, long CustomerNumber) throws DatabaseConnectionException {
         try {
-            dao.deletAction(type, CustomerNumber);
+            dao.deleteAction(type, CustomerNumber);
         } catch (DatabaseConnectionException | SQLException e) {
             throw new DatabaseConnectionException();
         }
@@ -45,7 +45,7 @@ public class ActionHandler {
         try {
             return dao.saveUser(company);
         } catch (DatabaseConnectionException | SQLException e) {
-            throw new DatabaseConnectionException();
+            throw new DatabaseConnectionException(e.toString());
         }
     }
 

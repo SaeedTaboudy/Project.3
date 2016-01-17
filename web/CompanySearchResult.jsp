@@ -39,6 +39,7 @@
                             <td>EconomicNum</td>
                             <td>RegDate</td>
                             <td>Edit</td>
+                            <td>Delete</td>
 
 
                         </tr>
@@ -61,7 +62,7 @@
 
                                 <form action="CompanyLoadServlet" method="post">
                                     <button type="submit" name="CustomerNumber" value=<%= company.getCustomerNumber()%> >
-                                        <img src="css/edit.png"  style="width:20px;height:20px;"
+                                        <img src="css/edit.png"  style="width:20px;height:20px;">
                                     </button>
                                 </form>
 
@@ -69,8 +70,9 @@
                             <td>
 
                                 <form action="CompanyDeleteServlet" method="post">
+
                                     <button type="submit" name="CustomerNumber" value=<%= company.getCustomerNumber()%> >
-                                        <img src="css/delete.png"  style="width:20px;height:20px;"
+                                        <img src="css/delete.png"  style="width:20px;height:20px;">
                                     </button>
                                 </form>
 

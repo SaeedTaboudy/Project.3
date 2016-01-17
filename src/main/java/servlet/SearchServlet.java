@@ -58,6 +58,7 @@ public class SearchServlet extends HttpServlet {
                 company.setEconomicCode(Long.valueOf(request.getParameter("EconomicCode")));
             }
             company.setName(request.getParameter("Name"));
+            company.setRegistrationDate(request.getParameter("RegistrationDate"));
             try {
                 request.setAttribute("companyList", actionHandler.search(company));
             } catch (DatabaseConnectionException  e) {

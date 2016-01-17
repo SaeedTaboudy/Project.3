@@ -6,6 +6,11 @@ package exception;
 public class DatabaseConnectionException extends Exception {
     private String message = null;
 
+    public DatabaseConnectionException(String message1) {
+
+        message = message1;
+    }
+
     public DatabaseConnectionException() {
     }
 
@@ -22,4 +27,5 @@ public class DatabaseConnectionException extends Exception {
                 "message='" + message + '\'' +
                 '}';
     }
+
 }

@@ -44,11 +44,10 @@ public class DaoImpl {
             statement.executeUpdate(query);
             statement.close();
             return "Company Save";
-        } catch (SQLException e) {
+        } catch (SQLException e){
             e.printStackTrace();
             throw new SQLException();
         }
-
     }
 
     public int saveUser(Person person) throws DatabaseConnectionException, RepetitiousNationalCode {
@@ -200,6 +199,7 @@ public class DaoImpl {
             companyResult.setName(resultSet.getString("Name"));
             companyResult.setEconomicCode(resultSet.getLong("EconomicCode"));
             companyResult.setCustomerNumber(resultSet.getLong("CustomerNumber"));
+            companyResult.setRegistrationDate(resultSet.getString("RegistrationDate"));
 
             companies.add(companyResult);
         }
@@ -208,7 +208,7 @@ public class DaoImpl {
         return companies;
     }
 
-    public void deletAction(String type, long CustomerNumber) throws DatabaseConnectionException, SQLException {
+    public void deleteAction(String type, long CustomerNumber) throws DatabaseConnectionException, SQLException {
         Statement statement = getConnection().createStatement();
         String query = "DELETE FROM " + type + " WHERE CustomerNumber= '" + CustomerNumber + "'";
         statement.executeUpdate(query);
